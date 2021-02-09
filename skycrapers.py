@@ -1,4 +1,4 @@
-def read_input(path: str):
+def read_input(path: str) -> list:
     """
     Read game board file from path.
     Return list of str.
@@ -13,7 +13,7 @@ def read_input(path: str):
     return board
 
 
-def left_to_right_check(input_line: str, pivot: int):
+def left_to_right_check(input_line: str, pivot: int) -> bool:
     """
     Check row-wise visibility from left to right.
     Return True if number of building from the left-most hint is visible looking to the right,
@@ -27,6 +27,17 @@ def left_to_right_check(input_line: str, pivot: int):
     >>> left_to_right_check("452453*", 5)
     False
     """
+    if pivot != int(input_line[0]):
+        return False
+    visible_buildings = 1
+    max_height = input_line[1]
+    for i in range(2, len(input_line)-1):
+        if int(input_line[i]) > int(max_height):
+            visible_buildings += 1
+            max_height = int(input_line[i])
+    if visible_buildings == pivot:
+        return True
+    return False
 
 
 def check_not_finished_board(board: list):
@@ -109,4 +120,3 @@ def check_skyscrapers(input_path: str):
 
 if __name__ == "__main__":
     print(check_skyscrapers("check.txt"))
-print(read_input("check.txt"))
