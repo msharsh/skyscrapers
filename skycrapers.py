@@ -4,7 +4,7 @@ def read_input(path: str) -> list:
     Return list of str.
 
     >>> read_input("check.txt")
-    ['***21**', '452453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***']
+    ['***21**', '412453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***']
     """
     with open(path) as board_file:
         board = board_file.readlines()
@@ -81,7 +81,7 @@ def check_uniqueness_in_rows(board: list) -> bool:
     return True
 
 
-def check_horizontal_visibility(board: list):
+def check_horizontal_visibility(board: list) -> bool:
     """
     Check row-wise visibility (left-right and vice versa)
 
@@ -96,10 +96,18 @@ def check_horizontal_visibility(board: list):
     >>> check_horizontal_visibility(['***21**', '452413*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])
     False
     """
-    pass
+    check = True
+    for i in range(1, len(board)-1):
+        if board[i][0] != '*':
+            check = left_to_right_check(board[i], int(board[i][0]))
+        elif board[i][-1] != '*':
+            check = left_to_right_check(board[i][::-1], int(board[i][-1]))
+        if not check:
+            return False
+    return True
 
 
-def check_columns(board: list):
+def check_columns(board: list) -> bool:
     """
     Check column-wise compliance of the board for uniqueness (buildings of unique height) and visibility (top-bottom and vice versa).
 
@@ -112,10 +120,18 @@ def check_columns(board: list):
     >>> check_columns(['***21**', '412553*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***'])
     False
     """
-    pass
+    board_turned = []
+    for i in range(len(board[0])):
+        new_row = ''
+        for j in range(len(board)):
+            new_row += board[j][i]
+        board_turned.append(new_row)
+    check_uniqueness = check_uniqueness_in_rows(board_turned)
+    check_visibility = check_horizontal_visibility(board_turned)
+    return check_uniqueness & check_visibility
 
 
-def check_skyscrapers(input_path: str):
+def check_skyscrapers(input_path: str) -> bool:
     """
     Main function to check the status of skyscraper game board.
     Return True if the board status is compliant with the rules,
@@ -124,7 +140,13 @@ def check_skyscrapers(input_path: str):
     >>> check_skyscrapers("check.txt")
     True
     """
-    pass
+    board = read_input(input_path)
+    if check_not_finished_board(board) and\
+        check_uniqueness_in_rows(board) and\
+            check_horizontal_visibility(board) and\
+                check_columns(board):
+                return True
+    return False
 
 
 if __name__ == "__main__":
