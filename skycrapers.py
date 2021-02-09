@@ -102,7 +102,10 @@ def check_horizontal_visibility(board: list) -> bool:
     """
     check = True
     for i in range(1, len(board)-1):
-        if board[i][0] != '*':
+        if board[i][0] != '*' and board[i][-1] != '*':
+            check = left_to_right_check(board[i], int(board[i][0])) &\
+                left_to_right_check(board[i][::-1], int(board[i][-1]))
+        elif board[i][0] != '*':
             check = left_to_right_check(board[i], int(board[i][0]))
         elif board[i][-1] != '*':
             check = left_to_right_check(board[i][::-1], int(board[i][-1]))
@@ -154,4 +157,6 @@ def check_skyscrapers(input_path: str) -> bool:
 
 
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
     print(check_skyscrapers("check.txt"))
