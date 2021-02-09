@@ -7,9 +7,9 @@ def read_input(path: str) -> list:
     ['***21**', '452453*', '423145*', '*543215', '*35214*', '*41532*', '*2*1***']
     """
     with open(path) as board_file:
-        board = board_file.read()
+        board = board_file.readlines()
         for i in range(len(board)):
-            board[i].strip()
+            board[i] = board[i].strip()
     return board
 
 
@@ -40,7 +40,7 @@ def left_to_right_check(input_line: str, pivot: int) -> bool:
     return False
 
 
-def check_not_finished_board(board: list):
+def check_not_finished_board(board: list) -> bool:
     """
     Check if skyscraper board is not finished, i.e., '?' present on the game board.
 
@@ -53,10 +53,13 @@ def check_not_finished_board(board: list):
     >>> check_not_finished_board(['***21**', '412453*', '423145*', '*5?3215', '*35214*', '*41532*', '*2*1***'])
     False
     """
-    pas
+    for line in board:
+        if '?' in line:
+            return False
+    return True
 
 
-def check_uniqueness_in_rows(board: list):
+def check_uniqueness_in_rows(board: list) -> bool:
     """
     Check buildings of unique height in each row.
 
@@ -69,7 +72,13 @@ def check_uniqueness_in_rows(board: list):
     >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*', '*553215', '*35214*', '*41532*', '*2*1***'])
     False
     """
-    pass
+    for i in range(1, len(board)-1):
+        line_temp = []
+        for j in range(1, len(board[i])-1):
+            if board[i][j] in line_temp:
+                return False
+            line_temp.append(board[i][j])
+    return True
 
 
 def check_horizontal_visibility(board: list):
@@ -119,4 +128,6 @@ def check_skyscrapers(input_path: str):
 
 
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
     print(check_skyscrapers("check.txt"))
