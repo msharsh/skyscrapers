@@ -1,3 +1,7 @@
+"""
+This module works with skyscrapers game.
+Git repository: https://github.com/msharsh/skyscrapers.git
+"""
 def read_input(path: str) -> list:
     """
     Read game board file from path.
@@ -150,6 +154,4 @@ def check_skyscrapers(input_path: str) -> bool:
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
     print(check_skyscrapers("check.txt"))
